@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/phim_bo"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_20sdp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPhimBo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:textColor="@color/colorWhite"
+                    android:text="@string/anime"
+                    android:textSize="@dimen/_20sdp" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAnime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+    </RelativeLayout>
+
+</layout>

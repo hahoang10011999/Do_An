@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_150sdp"
+    android:background="@drawable/side_nav_bar">
+
+    <ImageView
+        android:id="@+id/muc"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:src="@drawable/muc"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/_30sdp" />
+    <TextView
+        android:id="@+id/nav_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/muc"
+        android:text="@string/name_muc"
+        android:layout_alignLeft="@+id/muc" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nav_name"
+        android:layout_alignLeft="@+id/muc"
+        android:text="@string/mail"
+        android:layout_marginBottom="@dimen/_80sdp"/>
+</RelativeLayout>
