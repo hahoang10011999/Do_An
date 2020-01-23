@@ -7,13 +7,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.example.myapplication.Adapter.AdapterAnime;
 import com.example.myapplication.Adapter.AdapterVideo;
@@ -21,7 +21,7 @@ import com.example.myapplication.Contect.VideoContect;
 import com.example.myapplication.Define;
 import com.example.myapplication.InterFace.IonClickVideo;
 import com.example.myapplication.R;
-import com.example.myapplication.VideoTest;
+import com.example.myapplication.SQLHelper;
 import com.example.myapplication.databinding.ActivityTrangChuBinding;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,10 +37,14 @@ import java.util.List;
 public class TrangChu extends Fragment {
      ActivityTrangChuBinding binding;
     List<VideoContect> contects;
+    List<VideoContect> videoContects;
     AdapterVideo adapterVideo;
-    ProgressBar progressBar;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor  editor;
     AdapterAnime adapterAnime;
     String urlApi = Define.hotVideo;
+    SQLHelper sqlHelper;
+    int dem = 0;
     public static TrangChu newInstance() {
         Bundle args = new Bundle();
         TrangChu fragment = new TrangChu ();
@@ -53,15 +57,71 @@ public class TrangChu extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trang_chu,container,false);
         contects = new ArrayList<>();
         new DogetData(urlApi).execute();
+
+        sqlHelper = new SQLHelper(getContext());
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        editor = sharedPreferences.edit();
+
+        adapterAnime = new AdapterAnime(contects);
         adapterVideo = new AdapterVideo(contects);
         adapterVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
-                Intent intent = new Intent(getContext(), VideoTest.class);
-                intent.putExtra("linkVideo",contect.getUrl());
-                intent.putExtra("name",contect.getName());
-                intent.putExtra("date",contect.getDate());
-                startActivity(intent);
+                videoContects = sqlHelper.getAllProductAdvanced();
+                String avatar = contect.getImg();
+                String title = contect.getName();
+                String id = contect.getId();
+                String date = contect.getDate();
+                String link = contect.getUrl();
+
+
+                for(int i=0;i<videoContects.size();i++){
+                    if(videoContects.get(i).getId().equalsIgnoreCase(id) == true){
+                        dem = dem+1;
+                    }
+                }
+                if (dem == 0){
+                    sqlHelper.insertProduct(id,avatar,link,date,title);
+                    dem = 0;
+                }
+                editor.putString(Define.file_mp4,contect.getUrl());
+                editor.putString(Define.date_create,contect.getDate());
+                editor.putString(Define.title,contect.getName());
+                editor.commit();
+                getFragmentManager().beginTransaction().replace(R.id.container,new Video()).commit();
+
+            }
+        });
+        adapterAnime.setIonClickVideo(new IonClickVideo() {
+            @Override
+            public void onClickItem(VideoContect contect) {
+
+                videoContects = sqlHelper.getAllProductAdvanced();
+                String avatar = contect.getImg();
+                String title = contect.getName();
+                String id = contect.getId();
+                String date = contect.getDate();
+                String link = contect.getUrl();
+
+
+                for(int i=0;i<videoContects.size();i++){
+                    if(videoContects.get(i).getId().equalsIgnoreCase(id) == true){
+                        dem = dem+1;
+                    }
+                }
+                if (dem == 0){
+                    sqlHelper.insertProduct(id,avatar,link,date,title);
+                    dem = 0;
+                }
+
+                editor.putString(Define.file_mp4,contect.getUrl());
+                editor.putString(Define.date_create,contect.getDate());
+                editor.putString(Define.title,contect.getName());
+                editor.commit();
+
+
+                getFragmentManager().beginTransaction().replace(R.id.container,new Video()).commit();
             }
         });
         return binding.getRoot();
@@ -113,18 +173,19 @@ public class TrangChu extends Fragment {
                     String avatar = jsonObject.getString(Define.avatar);
                     String date = jsonObject.getString(Define.date_create);
                     String linkVideo = jsonObject.getString(Define.file_mp4);
-                    contect = new VideoContect(title,date,avatar,linkVideo);
+                    String id = jsonObject.getString(Define.id);
+                    contect = new VideoContect(title,date,avatar,linkVideo,id);
                     contects.add(contect);
                 }
                 RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
                 RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
 
-                adapterVideo = new AdapterVideo(contects);
+
                 binding.rvPhimBo.setAdapter(adapterVideo);
                 binding.rvPhimBo.setLayoutManager(layoutManager);
 
 
-                adapterAnime = new AdapterAnime(contects);
+
                 binding.rvAnime.setAdapter(adapterAnime);
                 binding.rvAnime.setLayoutManager(layoutManager1);
             } catch (JSONException e) {

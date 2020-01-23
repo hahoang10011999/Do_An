@@ -19,7 +19,7 @@ import com.example.myapplication.R;
 
 import java.util.List;
 
-public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.ViewHoder> {
+public class AdapterLichSu extends RecyclerView.Adapter<AdapterLichSu.ViewHoder> {
     List<VideoContect> contects;
     Context context;
     IonClickVideo ionClickVideo;
@@ -28,21 +28,23 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.ViewHoder> {
         this.ionClickVideo = ionClickVideo;
     }
 
-    public AdapterVideo(List<VideoContect> contects) {
+    public AdapterLichSu(List<VideoContect> contects,Context context) {
         this.contects = contects;
+        this.context = context;
     }
 
     @NonNull
     @Override
-    public AdapterVideo.ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterLichSu.ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.video_item,parent,false);
         ViewHoder viewHoder = new ViewHoder(view);
         context = parent.getContext();
         return viewHoder;
     }
+
     @Override
-    public void onBindViewHolder(@NonNull AdapterVideo.ViewHoder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
         final VideoContect contect = contects.get(position);
         Glide.with(context).load(contect.getImg()).into(holder.img);
         holder.name.setText(contect.getName());
@@ -53,8 +55,8 @@ public class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.ViewHoder> {
                 ionClickVideo.onClickItem(contect);
             }
         });
-
     }
+
     @Override
     public int getItemCount() {
         return contects.size();

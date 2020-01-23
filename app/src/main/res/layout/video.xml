@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
+        android:id="@+id/video"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_180sdp">
         <VideoView
+            android:id="@+id/playVideo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_180sdp"/>
         <RelativeLayout
@@ -43,6 +43,7 @@
                 android:textColor="@color/colorWhite"/>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/videoBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -120,4 +121,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</layout>
