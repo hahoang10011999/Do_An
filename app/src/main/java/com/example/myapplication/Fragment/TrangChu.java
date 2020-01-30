@@ -85,6 +85,7 @@ public class TrangChu extends Fragment {
                     sqlHelper.insertProduct(id,avatar,link,date,title);
                     dem = 0;
                 }
+
                 editor.putString(Define.file_mp4,contect.getUrl());
                 editor.putString(Define.date_create,contect.getDate());
                 editor.putString(Define.title,contect.getName());

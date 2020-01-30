@@ -1,124 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <RelativeLayout
-        android:id="@+id/video"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_180sdp">
-        <VideoView
-            android:id="@+id/playVideo"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_180sdp"/>
+        android:layout_height="match_parent">
+
+
         <RelativeLayout
+            android:id="@+id/video"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/_180sdp">
 
-            <ImageView
-                android:id="@+id/volum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_volume_up_black" />
-            <ImageView
+            <VideoView
+                android:id="@+id/playVideo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180sdp" />
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_fast_forward_black" />
-            <ImageView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_fast_rewind_black" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0%"
-                android:layout_below="@+id/volum"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/colorWhite"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/videoBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorWhite">
-            <ImageButton
-                android:id="@+id/nextVideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_skip_next_black"
-                android:background="@color/colorWhite"
-                android:layout_alignParentRight="true"/>
-            <ImageButton
-                android:id="@+id/backVideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_skip_previous_black"
-                android:background="@color/colorWhite"
-                android:layout_alignParentLeft="true"/>
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_arrow_black"
-                android:background="@color/colorWhite"
-                android:layout_centerHorizontal="true"/>
-            <ImageButton
-                android:id="@+id/pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_pause_black"
-                android:background="@color/colorWhite"
-                android:layout_centerHorizontal="true"/>
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fast_forward_black"
-                android:background="@color/colorWhite"
-                android:layout_toRightOf="@+id/pause"/>
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fast_rewind_black"
-                android:background="@color/colorWhite"
-                android:layout_toLeftOf="@+id/pause"/>
-            <TextView
-                android:id="@+id/timeRun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00"
-                android:layout_below="@+id/backVideo"/>
-            <TextView
-                android:id="@+id/allTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00"
-                android:layout_below="@+id/nextVideo"
-                android:layout_toLeftOf="@+id/nextVideo"/>
-            <SeekBar
-                android:id="@+id/seeBar"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="100"
-                android:progress="100"
-                android:layout_below="@+id/backVideo"
-                android:layout_toRightOf="@+id/timeRun"
-                android:layout_toLeftOf="@+id/allTime"/>
-            <ImageButton
-                android:layout_width="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/volum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_50sdp"
+                    android:src="@drawable/ic_volume_up_black" />
+
+                <ImageView
+                    android:id="@+id/imgFastForward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_50sdp"
+                    android:src="@drawable/ic_fast_forward_black" />
+
+                <ImageView
+                    android:id="@+id/imgRewind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_50sdp"
+                    android:src="@drawable/ic_fast_rewind_black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/volum"
+                    android:layout_centerHorizontal="true"
+                    android:text="0%"
+                    android:textColor="@color/colorWhite" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/videoBtn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_fullscreen_black"
-                android:background="@color/colorWhite"
-                android:layout_toRightOf="@+id/allTime"
-                android:layout_below="@+id/nextVideo"/>
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorWhite">
+
+                <ImageButton
+                    android:id="@+id/nextVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_skip_next_black" />
+
+                <ImageButton
+                    android:id="@+id/backVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_skip_previous_black" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_play_arrow_black" />
+
+                <ImageButton
+                    android:id="@+id/pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_pause_black" />
+
+                <ImageButton
+                    android:id="@+id/run"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_play_arrow_black" />
+
+                <ImageButton
+                    android:id="@+id/fastForWard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/pause"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_fast_forward_black" />
+
+                <ImageButton
+                    android:id="@+id/rewind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/pause"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_fast_rewind_black" />
+
+                <TextView
+                    android:id="@+id/timeRun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/backVideo"
+                    android:text="00:00" />
+
+                <TextView
+                    android:id="@+id/allTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nextVideo"
+                    android:layout_toLeftOf="@+id/nextVideo"
+                    android:text="00:00" />
+
+                <SeekBar
+                    android:id="@+id/seeBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/backVideo"
+                    android:layout_toLeftOf="@+id/allTime"
+                    android:layout_toRightOf="@+id/timeRun"
+                    android:max="100"
+                    android:progress="100" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nextVideo"
+                    android:layout_toRightOf="@+id/allTime"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_fullscreen_black" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
-
+        <TextView
+            android:layout_below="@+id/video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"/>
     </RelativeLayout>
-
 </layout>

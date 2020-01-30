@@ -1,7 +1,7 @@
 package com.example.myapplication.Fragment;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,29 +10,23 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+
 import com.example.myapplication.Define;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.VideoBinding;
-import java.text.SimpleDateFormat;
+
 import java.util.concurrent.TimeUnit;
 
-public class Video extends Fragment  {
+public class Video extends Fragment {
     VideoBinding binding;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Handler handler;
-
-    public static Video newInstance() {
-
-        Bundle args = new Bundle();
-        Video fragment = new Video();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Nullable
     @Override
@@ -48,10 +42,13 @@ public class Video extends Fragment  {
         binding.playVideo.setVideoURI(uri);
         binding.playVideo.requestFocus();
         binding.playVideo.start();
-
+        binding.run.setVisibility(View.GONE);
+        binding.imgFastForward.setVisibility(View.GONE);
+        binding.imgRewind.setVisibility(View.GONE);
+        binding.volum.setVisibility(View.GONE);
         handler = new Handler();
         ShowControl5s showControl5s = new ShowControl5s();
-        handler.postDelayed(showControl5s, 3000);
+        handler.postDelayed(showControl5s, 5000);
 
         binding.video.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -60,14 +57,50 @@ public class Video extends Fragment  {
                 return true;
             }
         });
+        binding.pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.playVideo.pause();
+                binding.pause.setVisibility(View.GONE);
+                binding.run.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.run.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.playVideo.start();
+                binding.run.setVisibility(View.GONE);
+                binding.pause.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.rewind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = binding.playVideo.getCurrentPosition();
+                int time = 5000;
+                if(current - time >=0){
+                    binding.playVideo.seekTo(current - time);
+                }else{
+                    binding.playVideo.seekTo(0);
+                }
+            }
+        });
+        binding.fastForWard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = binding.playVideo.getCurrentPosition();
+                int duration = binding.playVideo.getDuration();
+                int time = 5000;
+                if(current + time< duration){
+                    binding.playVideo.seekTo(current+time);
+                }
+            }
+        });
 
+        handler.postDelayed(runnable, 1000);
 
         return binding.getRoot();
     }
-@SuppressLint("SimpleDateFormat")
-private String millisecondsToTimer(int milliseconds) {
-    return new SimpleDateFormat("mm:ss").format(milliseconds);
-}
 
     class ShowControl5s implements Runnable {
         public void run() {
@@ -77,19 +110,47 @@ private String millisecondsToTimer(int milliseconds) {
     }
 
 
-
-
     public String milisecond(int miliseconds) {
-        Long minutes = TimeUnit.MILLISECONDS.toMinutes(miliseconds);
-        Long seconds = TimeUnit.MILLISECONDS.toSeconds(miliseconds);
-        return minutes + ":" + seconds;
+        String finalTimerString = "";
+        String secondsString = "";
+
+        int hours = (int) (miliseconds / (1000 * 60 * 60));
+        int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((miliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        return finalTimerString;
     }
 
-    public void doStart(View view) {
-        int duration = binding.playVideo.getDuration();
-        int currentPosition = binding.playVideo.getCurrentPosition();
-        if (currentPosition == 0) {
-            binding.seeBar.setMax(duration);
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (binding.playVideo != null) {
+                int mCurrentPosition = binding.playVideo.getCurrentPosition();
+                binding.seeBar.setProgress(mCurrentPosition);
+                int timeCurent = binding.playVideo.getCurrentPosition();
+                binding.timeRun.setText(milisecond(timeCurent));
+                int timeEnd = binding.playVideo.getDuration();
+                binding.allTime.setText(milisecond(timeEnd));
+                updateSeekBar();
+            }
         }
+    };
+
+    private void updateSeekBar() {
+        handler.postDelayed(runnable, 1000);
+        binding.seeBar.setMax(binding.playVideo.getDuration());
     }
+
 }
