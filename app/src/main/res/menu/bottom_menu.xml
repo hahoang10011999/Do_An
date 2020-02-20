@@ -10,10 +10,10 @@
         android:title="@string/phim_hai"/>
     <item
         android:id="@+id/bottomPhimLe"
-        android:icon="@drawable/ic_videocam_black_24dp"
+        android:icon="@drawable/ic_subscriptions_black_24dp"
         android:title="@string/phim_le"/>
     <item
         android:id="@+id/LichSu"
-        android:icon="@drawable/ic_videocam_black_24dp"
+        android:icon="@drawable/ic_video_library_black_24dp"
         android:title="@string/da_xem"/>
 </menu>

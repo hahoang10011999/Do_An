@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -63,7 +64,8 @@ public class VideoDaXem extends Fragment {
                     editor.putString(Define.date_create,contect.getDate());
                     editor.putString(Define.title,contect.getName());
                     editor.commit();
-                    getFragmentManager().beginTransaction().replace(R.id.container,new Video()).commit();
+                    Intent intent = new Intent(getContext(),FullScreen.class);
+                    startActivity(intent);
                 }
             });
         }

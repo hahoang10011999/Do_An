@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.example.myapplication.Define;
 import com.example.myapplication.InterFace.IonClickVideo;
 import com.example.myapplication.R;
 import com.example.myapplication.SQLHelper;
+import com.example.myapplication.SQLHelperList;
 import com.example.myapplication.databinding.ActivityPhimHaiBinding;
 
 import org.json.JSONArray;
@@ -45,9 +47,10 @@ public class PhimHai extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     List<VideoContect> videoContects;
+    List<VideoContect> list;
     SQLHelper sqlHelper;
     int dem = 0;
-
+    SQLHelperList sqlHelperList;
     public static PhimHai newInstance() {
         Bundle args = new Bundle();
         PhimHai fragment = new PhimHai ();
@@ -62,12 +65,30 @@ public class PhimHai extends Fragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         editor = sharedPreferences.edit();
         sqlHelper = new SQLHelper(getContext());
+        sqlHelperList = new SQLHelperList(getContext());
+        list = sqlHelperList.getAllProductAdvanced();
         contects = new ArrayList<>();
         adapterVideo = new AdapterVideo(contects);
         new DogetData(url).execute();
         adapterVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
+                if(list != null){
+                    sqlHelperList.delAllProduct();
+                }
+                for (int i = 0; i < contects.size(); i++) {
+
+                    if (contects.get(i).getId() != contect.getId()) {
+
+                        String avatar1 = contects.get(i).getImg();
+                        String title1 = contects.get(i).getName();
+                        String id1 = contects.get(i).getId();
+                        String date1 = contects.get(i).getDate();
+                        String link1 = contects.get(i).getUrl();
+                        sqlHelperList.insertProduct(id1, avatar1, link1, date1, title1);
+                    }
+
+                }
                 videoContects = sqlHelper.getAllProductAdvanced();
                 String avatar = contect.getImg();
                 String title = contect.getName();
@@ -89,7 +110,8 @@ public class PhimHai extends Fragment {
                 editor.putString(Define.date_create,contect.getDate());
                 editor.putString(Define.title,contect.getName());
                 editor.commit();
-                getFragmentManager().beginTransaction().replace(R.id.container,new Video()).commit();
+                Intent intent = new Intent(getContext(),FullScreen.class);
+                startActivity(intent);
             }
         });
         return binding.getRoot();

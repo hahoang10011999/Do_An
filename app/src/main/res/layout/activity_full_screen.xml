@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
+        <RelativeLayout
+            android:id="@+id/titleVideo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mauXam">
+            <ImageButton
+                android:id="@+id/backScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_black"
+                android:background="@color/mauXam"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/video"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_180sdp">
+            android:layout_below="@+id/titleVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <VideoView
                 android:id="@+id/playVideo"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp" />
-
+                android:layout_height="match_parent"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,6 +56,7 @@
                     android:src="@drawable/ic_fast_rewind_black" />
 
                 <TextView
+                    android:id="@+id/tvChange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/volum"
@@ -58,8 +69,7 @@
                 android:id="@+id/videoBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="8dp"
+                android:layout_alignBottom="@+id/playVideo"
                 android:background="@color/colorWhite">
 
                 <ImageButton
@@ -143,7 +153,15 @@
                     android:progress="100" />
 
                 <ImageButton
-                    android:id="@+id/fullScreen"
+                    android:id="@+id/exitFullScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nextVideo"
+                    android:layout_toRightOf="@+id/allTime"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/ic_fullscreen_exit_black_24dp" />
+                <ImageButton
+                    android:id="@+id/FullScreen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/nextVideo"
@@ -152,12 +170,18 @@
                     android:src="@drawable/ic_fullscreen_black" />
 
             </RelativeLayout>
-
         </RelativeLayout>
-        <TextView
-            android:layout_below="@+id/video"
+        <RelativeLayout
+            android:id="@+id/listPlayVideo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"/>
+            android:layout_below="@+id/video"
+            android:layout_marginTop="20dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
     </RelativeLayout>
+
 </layout>

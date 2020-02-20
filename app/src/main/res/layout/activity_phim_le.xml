@@ -3,8 +3,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tvPhimLe"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/phim_le"
+            android:textSize="@dimen/_20sdp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPhimLe"
+            android:layout_marginLeft="15dp"
+            android:layout_below="@+id/tvPhimLe"
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </RelativeLayout>
