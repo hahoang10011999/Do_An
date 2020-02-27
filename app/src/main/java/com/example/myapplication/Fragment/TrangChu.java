@@ -21,9 +21,10 @@ import com.example.myapplication.Adapter.AdapterVideo;
 import com.example.myapplication.Contect.VideoContect;
 import com.example.myapplication.Define;
 import com.example.myapplication.InterFace.IonClickVideo;
+import com.example.myapplication.PutVideoList;
 import com.example.myapplication.R;
-import com.example.myapplication.SQLHelper;
-import com.example.myapplication.SQLHelperList;
+import com.example.myapplication.SQL.SQLHelper;
+import com.example.myapplication.SQL.SQLHelperList;
 import com.example.myapplication.databinding.ActivityTrangChuBinding;
 
 import org.json.JSONArray;
@@ -51,6 +52,7 @@ public class TrangChu extends Fragment {
     SQLHelper sqlHelper;
     SQLHelperList sqlHelperList;
     int dem = 0;
+    PutVideoList putVideoList;
 
     public static TrangChu newInstance() {
         Bundle args = new Bundle();
@@ -64,8 +66,8 @@ public class TrangChu extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trang_chu, container, false);
         contects = new ArrayList<>();
-
         new DogetData(urlApi).execute();
+        putVideoList = new PutVideoList(getContext());
 
         sqlHelper = new SQLHelper(getContext());
         sqlHelperList = new SQLHelperList(getContext());
@@ -78,38 +80,13 @@ public class TrangChu extends Fragment {
         adapterVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
-                if(list != null){
+                if (list != null) {
                     sqlHelperList.delAllProduct();
                 }
-                for (int i = 0; i < contects.size(); i++) {
-                    if (contects.get(i).getId() != contect.getId()) {
-
-                        String avatar1 = contects.get(i).getImg();
-                        String title1 = contects.get(i).getName();
-                        String id1 = contects.get(i).getId();
-                        String date1 = contects.get(i).getDate();
-                        String link1 = contects.get(i).getUrl();
-                        sqlHelperList.insertProduct(id1, avatar1, link1, date1, title1);
-                    }
-
-                }
-                videoContects = sqlHelper.getAllProductAdvanced();
-                String avatar = contect.getImg();
-                String title = contect.getName();
-                String id = contect.getId();
-                String date = contect.getDate();
-                String link = contect.getUrl();
 
 
-                for (int i = 0; i < videoContects.size(); i++) {
-                    if (videoContects.get(i).getId().equalsIgnoreCase(id) == true) {
-                        dem = dem + 1;
-                    }
-                }
-                if (dem == 0) {
-                    sqlHelper.insertProduct(id, avatar, link, date, title);
-                    dem = 0;
-                }
+                putVideoList.onPutVideo(contects, contect, sqlHelperList);
+                putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
                 editor.putString(Define.file_mp4, contect.getUrl());
                 editor.putString(Define.date_create, contect.getDate());
@@ -125,48 +102,22 @@ public class TrangChu extends Fragment {
             @Override
             public void onClickItem(VideoContect contect) {
 
-                videoContects = sqlHelper.getAllProductAdvanced();
-
-                String avatar = contect.getImg();
-                String title = contect.getName();
-                String id = contect.getId();
-                String date = contect.getDate();
-                String link = contect.getUrl();
-                if(list != null){
+                if (list != null) {
                     sqlHelperList.delAllProduct();
                 }
-                for (int i = 0; i < contects.size(); i++) {
 
-                    if (contects.get(i).getId() != contect.getId()) {
 
-                        String avatar1 = contects.get(i).getImg();
-                        String title1 = contects.get(i).getName();
-                        String id1 = contects.get(i).getId();
-                        String date1 = contects.get(i).getDate();
-                        String link1 = contects.get(i).getUrl();
-                        sqlHelperList.insertProduct(id1, avatar1, link1, date1, title1);
-                    }
-
-                }
-
-                for (int i = 0; i < videoContects.size(); i++) {
-                    if (videoContects.get(i).getId().equalsIgnoreCase(id) == true) {
-                        dem = dem + 1;
-                    }
-                }
-                if (dem == 0) {
-                    sqlHelper.insertProduct(id, avatar, link, date, title);
-                    dem = 0;
-                }
+                putVideoList.onPutVideo(contects, contect, sqlHelperList);
+                putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
                 editor.putString(Define.file_mp4, contect.getUrl());
                 editor.putString(Define.date_create, contect.getDate());
                 editor.putString(Define.title, contect.getName());
                 editor.commit();
 
-
                 Intent intent = new Intent(getContext(), FullScreen.class);
                 startActivity(intent);
+
             }
         });
         return binding.getRoot();
@@ -225,7 +176,6 @@ public class TrangChu extends Fragment {
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
                 RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
 
-
                 binding.rvPhimBo.setAdapter(adapterVideo);
                 binding.rvPhimBo.setLayoutManager(layoutManager);
 
@@ -237,7 +187,5 @@ public class TrangChu extends Fragment {
             }
         }
     }
-
-
 }
 

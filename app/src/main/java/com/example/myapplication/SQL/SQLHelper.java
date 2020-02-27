@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.SQL;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,32 +10,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.myapplication.Contect.VideoContect;
+import com.example.myapplication.Define;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLHelperList extends SQLiteOpenHelper {
-    private static final String TAG = "SQLHelperList";
-    static final String DB_NAME = "Product1.db";
-    static final String DB_NAME_TABLE = "Product1";
+public class SQLHelper extends SQLiteOpenHelper {
+    private static final String TAG = "SQLHelper";
+    static final String DB_NAME = "Product.db";
+    static final String DB_NAME_TABLE = "Product";
     static final int DB_VERSION = 5;
 
     SQLiteDatabase sqLiteDatabase;
     ContentValues contentValues;
     Cursor cursor;
 
-    public SQLHelperList(@Nullable Context context) {
+    public SQLHelper(@Nullable Context context) {
         super(context, DB_NAME,null,DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String itemList = "CREATE TABLE Product1 (" + "id INTEGER ,"
+        String queryCreaTable = "CREATE TABLE Product (" + "id INTEGER ,"
                 +"title Text,"
                 +"date Text,"
                 +"link Text,"
                 +"avatar Text ) ";
-        db.execSQL(itemList);
+        db.execSQL(queryCreaTable);
     }
 
     @Override
@@ -56,14 +57,6 @@ public class SQLHelperList extends SQLiteOpenHelper {
 
         sqLiteDatabase.insert(DB_NAME_TABLE,null,contentValues);
         closeDB();
-    }
-    public boolean delAllProduct() {
-        int result;
-        sqLiteDatabase = getWritableDatabase();
-        result = sqLiteDatabase.delete(DB_NAME_TABLE, null, null);
-        closeDB();
-        if (result == 1) return true;
-        else return false;
     }
     public List<VideoContect> getAllProductAdvanced(){
         List<VideoContect> videoContects = new ArrayList<>();

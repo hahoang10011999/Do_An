@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -17,12 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.Adapter.AdapterLichSu;
-import com.example.myapplication.Adapter.AdapterVideo;
 import com.example.myapplication.Contect.VideoContect;
 import com.example.myapplication.Define;
 import com.example.myapplication.InterFace.IonClickVideo;
+import com.example.myapplication.PutVideoList;
 import com.example.myapplication.R;
-import com.example.myapplication.SQLHelper;
+import com.example.myapplication.SQL.SQLHelper;
+import com.example.myapplication.SQL.SQLHelperList;
 import com.example.myapplication.databinding.ActivityVideoDaXemBinding;
 
 import java.util.List;
@@ -31,9 +31,14 @@ public class VideoDaXem extends Fragment {
     ActivityVideoDaXemBinding binding;
     List<VideoContect> contects;
     SQLHelper sqlHelper;
+    SQLHelperList sqlHelperList;
     AdapterLichSu adapterLichSu;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    PutVideoList putVideoList;
+    List<VideoContect> list;
+    List<VideoContect> videoContects;
+    int dem;
 
     public static VideoDaXem newInstance() {
         Bundle args = new Bundle();
@@ -47,6 +52,8 @@ public class VideoDaXem extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_video_da_xem,container,false);
         sqlHelper = new SQLHelper(getContext());
+        sqlHelperList = new SQLHelperList(getContext());
+        list = sqlHelperList.getAllProductAdvanced();
         contects = sqlHelper.getAllProductAdvanced();
 
         if(contects != null){
@@ -60,11 +67,20 @@ public class VideoDaXem extends Fragment {
             adapterLichSu.setIonClickVideo(new IonClickVideo() {
                 @Override
                 public void onClickItem(VideoContect contect) {
-                    editor.putString(Define.file_mp4,contect.getUrl());
-                    editor.putString(Define.date_create,contect.getDate());
-                    editor.putString(Define.title,contect.getName());
+                    if (list != null) {
+                        sqlHelperList.delAllProduct();
+                    }
+
+
+                    putVideoList.onPutVideo(contects, contect, sqlHelperList);
+                    putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
+
+                    editor.putString(Define.file_mp4, contect.getUrl());
+                    editor.putString(Define.date_create, contect.getDate());
+                    editor.putString(Define.title, contect.getName());
                     editor.commit();
-                    Intent intent = new Intent(getContext(),FullScreen.class);
+
+                    Intent intent = new Intent(getContext(), FullScreen.class);
                     startActivity(intent);
                 }
             });

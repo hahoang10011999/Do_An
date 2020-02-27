@@ -14,24 +14,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.example.myapplication.Adapter.AdapterPlayVideo;
-import com.example.myapplication.Adapter.AdapterVideo;
 import com.example.myapplication.Contect.VideoContect;
 import com.example.myapplication.Define;
 import com.example.myapplication.InterFace.IonClickVideo;
-import com.example.myapplication.MainActivity;
+import com.example.myapplication.PutVideoList;
 import com.example.myapplication.R;
-import com.example.myapplication.SQLHelper;
-import com.example.myapplication.SQLHelperList;
+import com.example.myapplication.SQL.SQLHelper;
+import com.example.myapplication.SQL.SQLHelperList;
 import com.example.myapplication.databinding.ActivityFullScreenBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FullScreen extends AppCompatActivity {
@@ -46,7 +43,9 @@ public class FullScreen extends AppCompatActivity {
     SQLHelper sqlHelper;
     List<VideoContect> contects;
     List<VideoContect> videoContects;
+    List<VideoContect> list;
     SQLHelperList sqlHelperList;
+    PutVideoList putVideoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,43 +66,25 @@ public class FullScreen extends AppCompatActivity {
 
         sqlHelper = new SQLHelper(getBaseContext());
         sqlHelperList = new SQLHelperList(getBaseContext());
-
+        putVideoList = new PutVideoList(getBaseContext());
+        list = sqlHelperList.getAllProductAdvanced();
+//list video
         contects = sqlHelperList.getAllProductAdvanced();
         adapterPlayVideo = new AdapterPlayVideo(contects);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getBaseContext(),1,RecyclerView.VERTICAL,false);
         binding.rvVideo.setAdapter(adapterPlayVideo);
         binding.rvVideo.setLayoutManager(layoutManager);
+
         adapterPlayVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
-                for (int i = 0; i < contects.size(); i++) {
-                    if (contects.get(i).getId() != contect.getId()) {
-                        String avatar1 = contects.get(i).getImg();
-                        String title1 = contects.get(i).getName();
-                        String id1 = contects.get(i).getId();
-                        String date1 = contects.get(i).getDate();
-                        String link1 = contects.get(i).getUrl();
-                        sqlHelperList.insertProduct(id1, avatar1, link1, date1, title1);
-                    }
-
+                if (list != null) {
+                    sqlHelperList.delAllProduct();
                 }
-                videoContects = sqlHelper.getAllProductAdvanced();
-                String avatar = contect.getImg();
-                String title = contect.getName();
-                String id = contect.getId();
-                String date = contect.getDate();
-                String link = contect.getUrl();
 
 
-                for (int i = 0; i < videoContects.size(); i++) {
-                    if (videoContects.get(i).getId().equalsIgnoreCase(id) == true) {
-                        dem = dem + 1;
-                    }
-                }
-                if (dem == 0) {
-                    sqlHelper.insertProduct(id, avatar, link, date, title);
-                    dem = 0;
-                }
+                putVideoList.onPutVideo(contects, contect, sqlHelperList);
+                putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
                 editor.putString(Define.file_mp4, contect.getUrl());
                 editor.putString(Define.date_create, contect.getDate());
@@ -122,13 +103,12 @@ public class FullScreen extends AppCompatActivity {
         binding.tvChange.setVisibility(View.GONE);
         binding.exitFullScreen.setVisibility(View.INVISIBLE);
 
-
+//show control 5s
         handler = new Handler();
         ShowControl5s showControl = new ShowControl5s();
         handler.postDelayed(showControl, 5000);
-
         handler.postDelayed(runnable, 1000);
-
+//return to main screen
         binding.backScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +123,7 @@ public class FullScreen extends AppCompatActivity {
                 binding.run.setVisibility(View.VISIBLE);
             }
         });
+//run video
         binding.run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,6 +132,7 @@ public class FullScreen extends AppCompatActivity {
                 binding.pause.setVisibility(View.VISIBLE);
             }
         });
+//rewin 5s
         binding.rewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +145,7 @@ public class FullScreen extends AppCompatActivity {
                 }
             }
         });
+//fast for ward 5s
         binding.fastForWard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,6 +157,7 @@ public class FullScreen extends AppCompatActivity {
                 }
             }
         });
+//full screen
         binding.FullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,6 +181,7 @@ public class FullScreen extends AppCompatActivity {
                 timeRun = binding.playVideo.getCurrentPosition();
             }
         });
+//exit full screen
         binding.exitFullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,7 +205,7 @@ public class FullScreen extends AppCompatActivity {
         });
 
 
-
+//control audio and position
         audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         stepVolume = 100 / maxVolume;
