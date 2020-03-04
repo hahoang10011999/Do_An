@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +20,8 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.Adapter.AdapterAnime;
 import com.example.myapplication.Adapter.AdapterVideo;
+import com.example.myapplication.Adapter.SliderAdapterExample;
+import com.example.myapplication.Contect.SliderContect;
 import com.example.myapplication.Contect.VideoContect;
 import com.example.myapplication.Define;
 import com.example.myapplication.InterFace.IonClickVideo;
@@ -26,6 +30,9 @@ import com.example.myapplication.R;
 import com.example.myapplication.SQL.SQLHelper;
 import com.example.myapplication.SQL.SQLHelperList;
 import com.example.myapplication.databinding.ActivityTrangChuBinding;
+import com.smarteist.autoimageslider.IndicatorAnimations;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +51,7 @@ public class TrangChu extends Fragment {
     List<VideoContect> contects;
     List<VideoContect> videoContects;
     List<VideoContect> list;
+    List<SliderContect> sliderContects;
     AdapterVideo adapterVideo;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -51,9 +59,11 @@ public class TrangChu extends Fragment {
     String urlApi = Define.hotVideo;
     SQLHelper sqlHelper;
     SQLHelperList sqlHelperList;
+
+
     int dem = 0;
     PutVideoList putVideoList;
-
+    SliderAdapterExample sliderAdapterExample;
     public static TrangChu newInstance() {
         Bundle args = new Bundle();
         TrangChu fragment = new TrangChu();
@@ -66,6 +76,7 @@ public class TrangChu extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trang_chu, container, false);
         contects = new ArrayList<>();
+        sliderContects = new ArrayList<>() ;
         new DogetData(urlApi).execute();
         putVideoList = new PutVideoList(getContext());
 
@@ -74,6 +85,18 @@ public class TrangChu extends Fragment {
         list = sqlHelperList.getAllProductAdvanced();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         editor = sharedPreferences.edit();
+
+        sliderAdapterExample = new SliderAdapterExample( getContext());
+        sliderAdapterExample.setCount(5);
+        binding.imageSlider.setSliderAdapter(sliderAdapterExample);
+        binding.imageSlider.setIndicatorAnimation(IndicatorAnimations.THIN_WORM);
+        binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        binding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
+        binding.imageSlider.setIndicatorSelectedColor(Color.WHITE);
+        binding.imageSlider.setIndicatorUnselectedColor(Color.GRAY);
+        binding.imageSlider.setScrollTimeInSec(3);
+        binding.imageSlider.setAutoCycle(true);
+
 
         adapterAnime = new AdapterAnime(contects);
         adapterVideo = new AdapterVideo(contects);
@@ -123,6 +146,7 @@ public class TrangChu extends Fragment {
         return binding.getRoot();
     }
 
+
     class DogetData extends AsyncTask<Void, Void, Void> {
         String result = "";
         String urlApi;
@@ -163,6 +187,7 @@ public class TrangChu extends Fragment {
                 JSONArray jsonArray = new JSONArray(result);
                 int length = jsonArray.length();
                 VideoContect contect;
+
                 for (int i = 0; i < length; i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String title = jsonObject.getString(Define.title);
@@ -171,6 +196,8 @@ public class TrangChu extends Fragment {
                     String linkVideo = jsonObject.getString(Define.file_mp4);
                     String id = jsonObject.getString(Define.id);
                     contect = new VideoContect(title, date, avatar, linkVideo, id);
+
+
                     contects.add(contect);
                 }
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);

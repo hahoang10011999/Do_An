@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -9,6 +10,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+               <com.smarteist.autoimageslider.SliderView
+                   android:layout_width="match_parent"
+                   android:id="@+id/imageSlider"
+                   android:layout_height="200dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -32,6 +37,7 @@
                     android:textColor="@color/colorWhite"
                     android:text="@string/anime"
                     android:textSize="@dimen/_20sdp" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAnime"
                     android:layout_width="match_parent"
