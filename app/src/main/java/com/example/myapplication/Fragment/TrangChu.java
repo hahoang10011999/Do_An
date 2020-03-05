@@ -59,11 +59,10 @@ public class TrangChu extends Fragment {
     String urlApi = Define.hotVideo;
     SQLHelper sqlHelper;
     SQLHelperList sqlHelperList;
-
-
     int dem = 0;
     PutVideoList putVideoList;
     SliderAdapterExample sliderAdapterExample;
+
     public static TrangChu newInstance() {
         Bundle args = new Bundle();
         TrangChu fragment = new TrangChu();
@@ -89,13 +88,13 @@ public class TrangChu extends Fragment {
         sliderAdapterExample = new SliderAdapterExample( getContext());
         sliderAdapterExample.setCount(5);
         binding.imageSlider.setSliderAdapter(sliderAdapterExample);
-        binding.imageSlider.setIndicatorAnimation(IndicatorAnimations.THIN_WORM);
+        binding.imageSlider.setIndicatorAnimation(IndicatorAnimations.FILL);
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        binding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
+        binding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         binding.imageSlider.setIndicatorSelectedColor(Color.WHITE);
         binding.imageSlider.setIndicatorUnselectedColor(Color.GRAY);
         binding.imageSlider.setScrollTimeInSec(3);
-        binding.imageSlider.setAutoCycle(true);
+        binding.imageSlider.startAutoCycle();
 
 
         adapterAnime = new AdapterAnime(contects);
