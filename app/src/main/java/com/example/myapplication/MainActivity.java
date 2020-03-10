@@ -17,11 +17,13 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -43,16 +45,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivity";
     DrawerLayout drawerLayout;
     Disposable disposable;
-    ProgressBar progressBar;
+    LinearLayout checkInternet;
+    Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progressBar = findViewById(R.id.proressbar);
-
+        checkInternet = findViewById(R.id.checkInternet);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
 
         drawerLayout = findViewById(R.id.drawer);
         NavigationView navigationView = findViewById(R.id.nav_View);
@@ -128,7 +131,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         else {
                             getFragment(TrangChu.newInstance());
-                            progressBar.setVisibility(View.VISIBLE);
+
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkInternet.setVisibility(View.GONE);
+                                }
+                            },5000);
+
                         }
 
                     }

@@ -2,7 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
         <TextView
             android:id="@+id/tvPhimLe"
             android:layout_marginTop="10dp"

@@ -44,7 +44,7 @@ public class PhimLe extends Fragment {
     SharedPreferences.Editor editor;
     List<VideoContect> contects;
     AdapterVideo adapterVideo;
-    String url = Define.hotVideo;
+    String urlPL = Define.phimLe;
     List<VideoContect> videoContects;
     List<VideoContect> list;
     SQLHelper sqlHelper;
@@ -71,7 +71,7 @@ public class PhimLe extends Fragment {
         list = sqlHelperList.getAllProductAdvanced();
 
         adapterVideo = new AdapterVideo(contects);
-        new PhimLe.DogetData(url).execute();
+        new PhimLe.DogetData(urlPL).execute();
         putVideoList = new PutVideoList(getContext());
         adapterVideo.setIonClickVideo(new IonClickVideo() {
             @Override
@@ -90,6 +90,8 @@ public class PhimLe extends Fragment {
                 editor.putString(Define.file_mp4, contect.getUrl());
                 editor.putString(Define.date_create, contect.getDate());
                 editor.putString(Define.title, contect.getName());
+                editor.putString(Define.id,contect.getId());
+                editor.putString(Define.avatar,contect.getImg());
                 editor.commit();
 
                 Intent intent = new Intent(getContext(), FullScreen.class);

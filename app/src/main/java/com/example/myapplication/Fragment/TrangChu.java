@@ -49,6 +49,7 @@ import java.util.List;
 public class TrangChu extends Fragment {
     ActivityTrangChuBinding binding;
     List<VideoContect> contects;
+    List<VideoContect> contects1;
     List<VideoContect> videoContects;
     List<VideoContect> list;
     List<SliderContect> sliderContects;
@@ -57,6 +58,7 @@ public class TrangChu extends Fragment {
     SharedPreferences.Editor editor;
     AdapterAnime adapterAnime;
     String urlApi = Define.hotVideo;
+    String urlPL = Define.phimLe;
     SQLHelper sqlHelper;
     SQLHelperList sqlHelperList;
     int dem = 0;
@@ -75,8 +77,10 @@ public class TrangChu extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trang_chu, container, false);
         contects = new ArrayList<>();
+        contects1 = new ArrayList<>();
         sliderContects = new ArrayList<>() ;
         new DogetData(urlApi).execute();
+        new DogetData1(urlPL).execute();
         putVideoList = new PutVideoList(getContext());
 
         sqlHelper = new SQLHelper(getContext());
@@ -97,22 +101,31 @@ public class TrangChu extends Fragment {
         binding.imageSlider.startAutoCycle();
 
 
-        adapterAnime = new AdapterAnime(contects);
+        adapterAnime = new AdapterAnime(contects1);
         adapterVideo = new AdapterVideo(contects);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+
+        binding.rvPhimBo.setAdapter(adapterVideo);
+        binding.rvPhimBo.setLayoutManager(layoutManager);
+
+
+        binding.rvAnime.setAdapter(adapterAnime);
+        binding.rvAnime.setLayoutManager(layoutManager1);
         adapterVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
                 if (list != null) {
                     sqlHelperList.delAllProduct();
                 }
-
-
                 putVideoList.onPutVideo(contects, contect, sqlHelperList);
                 putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
                 editor.putString(Define.file_mp4, contect.getUrl());
                 editor.putString(Define.date_create, contect.getDate());
                 editor.putString(Define.title, contect.getName());
+                editor.putString(Define.id,contect.getId());
+                editor.putString(Define.avatar,contect.getImg());
                 editor.commit();
 
                 Intent intent = new Intent(getContext(), FullScreen.class);
@@ -135,6 +148,8 @@ public class TrangChu extends Fragment {
                 editor.putString(Define.file_mp4, contect.getUrl());
                 editor.putString(Define.date_create, contect.getDate());
                 editor.putString(Define.title, contect.getName());
+                editor.putString(Define.id,contect.getId());
+                editor.putString(Define.avatar,contect.getImg());
                 editor.commit();
 
                 Intent intent = new Intent(getContext(), FullScreen.class);
@@ -195,19 +210,66 @@ public class TrangChu extends Fragment {
                     String linkVideo = jsonObject.getString(Define.file_mp4);
                     String id = jsonObject.getString(Define.id);
                     contect = new VideoContect(title, date, avatar, linkVideo, id);
-
-
                     contects.add(contect);
                 }
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
-                RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
 
-                binding.rvPhimBo.setAdapter(adapterVideo);
-                binding.rvPhimBo.setLayoutManager(layoutManager);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class DogetData1 extends AsyncTask<Void, Void, Void> {
+        String result = "";
+        String urlPL;
 
+        public DogetData1(String url) {
+            this.urlPL = url;
+        }
 
-                binding.rvAnime.setAdapter(adapterAnime);
-                binding.rvAnime.setLayoutManager(layoutManager1);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                URL url = new URL(urlPL);
+                URLConnection connection = url.openConnection();
+                InputStream is = connection.getInputStream();
+                int byteCharacter;
+                while ((byteCharacter = is.read()) != -1) {
+                    result += (char) byteCharacter;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                int length = jsonArray.length();
+                VideoContect contect;
+
+                for (int i = 0; i < length; i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String title = jsonObject.getString(Define.title);
+                    String avatar = jsonObject.getString(Define.avatar);
+                    String date = jsonObject.getString(Define.date_create);
+                    String linkVideo = jsonObject.getString(Define.file_mp4);
+                    String id = jsonObject.getString(Define.id);
+                    contect = new VideoContect(title, date, avatar, linkVideo, id);
+                    contects1.add(contect);
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

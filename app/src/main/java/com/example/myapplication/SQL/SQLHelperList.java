@@ -58,6 +58,11 @@ public class SQLHelperList extends SQLiteOpenHelper {
         sqLiteDatabase.insert(DB_NAME_TABLE,null,contentValues);
         closeDB();
     }
+    public int deleteProduct(String id) {
+        sqLiteDatabase = getWritableDatabase();
+        return sqLiteDatabase.delete(DB_NAME_TABLE, " id=?",
+                new String[]{String.valueOf(id)});
+    }
     public boolean delAllProduct() {
         int result;
         sqLiteDatabase = getWritableDatabase();

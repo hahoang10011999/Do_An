@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Fragment.FullScreen"
+        <activity
+            android:name=".Fragment.FullScreen"
             android:configChanges="orientation|screenSize"
             />
 

@@ -3,22 +3,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
-            android:id="@+id/titleVideo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/mauXam">
-            <ImageButton
-                android:id="@+id/backScreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_back_black"
-                android:background="@color/mauXam"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/video"
-            android:layout_below="@+id/titleVideo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -35,36 +22,48 @@
                     android:id="@+id/volum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/_50sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/_100sdp"
                     android:src="@drawable/ic_volume_up_black" />
 
                 <ImageView
                     android:id="@+id/imgFastForward"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/_50sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/_100sdp"
                     android:src="@drawable/ic_fast_forward_black" />
 
                 <ImageView
                     android:id="@+id/imgRewind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/_50sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/_100sdp"
                     android:src="@drawable/ic_fast_rewind_black" />
 
                 <TextView
                     android:id="@+id/tvChange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/volum"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_70sdp"
                     android:text="0%"
                     android:textColor="@color/colorWhite" />
             </RelativeLayout>
-
+            <RelativeLayout
+                android:id="@+id/titleVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/mauXam">
+                <ImageButton
+                    android:id="@+id/backScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_back_black"
+                    android:background="@color/mauXam"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/videoBtn"
                 android:layout_width="match_parent"

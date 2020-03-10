@@ -57,8 +57,12 @@ public class FullScreen extends AppCompatActivity {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         editor = sharedPreferences.edit();
-        String link = sharedPreferences.getString(Define.file_mp4, "");
-
+        final String link = sharedPreferences.getString(Define.file_mp4, "");
+        final String id = sharedPreferences.getString(Define.id,"");
+        final String avatar = sharedPreferences.getString(Define.avatar,"");
+        final String title = sharedPreferences.getString(Define.title,"");
+        final String date = sharedPreferences.getString(Define.date_create,"");
+        final VideoContect videoContect = new VideoContect(title,date,avatar,link,id);
         Uri uri = Uri.parse(link);
         binding.playVideo.setVideoURI(uri);
         binding.playVideo.requestFocus();
@@ -72,29 +76,38 @@ public class FullScreen extends AppCompatActivity {
         contects = sqlHelperList.getAllProductAdvanced();
         adapterPlayVideo = new AdapterPlayVideo(contects);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getBaseContext(),1,RecyclerView.VERTICAL,false);
-        binding.rvVideo.setAdapter(adapterPlayVideo);
+       // binding.rvVideo.setAdapter(adapterPlayVideo);
         binding.rvVideo.setLayoutManager(layoutManager);
 
         adapterPlayVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
-                if (list != null) {
-                    sqlHelperList.delAllProduct();
+                adapterPlayVideo = new AdapterPlayVideo(contects);
+                for (int i=0;i< contects.size();i++){
+                    if(contect.getId() == contects.get(i).getId()){
+                        contects.remove(contect);
+                    }
                 }
-
-
-                putVideoList.onPutVideo(contects, contect, sqlHelperList);
+                contects.add(videoContect);
                 putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
                 editor.putString(Define.file_mp4, contect.getUrl());
                 editor.putString(Define.date_create, contect.getDate());
                 editor.putString(Define.title, contect.getName());
+                editor.putString(Define.id,contect.getId());
+                editor.putString(Define.avatar,contect.getImg());
                 editor.commit();
 
-                Intent intent = new Intent(getBaseContext(), FullScreen.class);
-                startActivity(intent);
+                Uri uri1 = Uri.parse(contect.getUrl());
+                binding.playVideo.setVideoURI(uri1);
+                binding.playVideo.requestFocus();
+                binding.playVideo.start();
+
+
+                binding.rvVideo.setAdapter(adapterPlayVideo);
             }
         });
+        binding.rvVideo.setAdapter(adapterPlayVideo);
 
         binding.run.setVisibility(View.GONE);
         binding.imgFastForward.setVisibility(View.GONE);
@@ -102,6 +115,7 @@ public class FullScreen extends AppCompatActivity {
         binding.volum.setVisibility(View.GONE);
         binding.tvChange.setVisibility(View.GONE);
         binding.exitFullScreen.setVisibility(View.INVISIBLE);
+
 
 //show control 5s
         handler = new Handler();
@@ -157,14 +171,20 @@ public class FullScreen extends AppCompatActivity {
                 }
             }
         });
+//next video
+        binding.nextVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 //full screen
         binding.FullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 binding.exitFullScreen.setVisibility(View.VISIBLE);
                 binding.FullScreen.setVisibility(View.INVISIBLE);
-                binding.titleVideo.setVisibility(View.INVISIBLE);
-                binding.backScreen.setVisibility(View.GONE);
+                binding.titleVideo.setVisibility(View.GONE);
                 binding.listPlayVideo.setVisibility(View.GONE);
 
                 timeRun = binding.playVideo.getCurrentPosition();
@@ -190,7 +210,7 @@ public class FullScreen extends AppCompatActivity {
                 binding.FullScreen.setVisibility(View.VISIBLE);
                 binding.titleVideo.setVisibility(View.VISIBLE);
                 binding.listPlayVideo.setVisibility(View.VISIBLE);
-                binding.backScreen.setVisibility(View.VISIBLE);
+
 
 
                 timeRun = binding.playVideo.getCurrentPosition();
@@ -270,7 +290,7 @@ public class FullScreen extends AppCompatActivity {
 
     class ShowControl5s implements Runnable {
         public void run() {
-            handler.postDelayed(this, 3000);
+            handler.postDelayed(this, 5000);
             binding.videoBtn.setVisibility(View.INVISIBLE);
         }
     }
