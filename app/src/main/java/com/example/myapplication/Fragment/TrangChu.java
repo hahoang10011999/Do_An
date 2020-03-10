@@ -142,7 +142,7 @@ public class TrangChu extends Fragment {
                 }
 
 
-                putVideoList.onPutVideo(contects, contect, sqlHelperList);
+                putVideoList.onPutVideo(contects1, contect, sqlHelperList);
                 putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
                 editor.putString(Define.file_mp4, contect.getUrl());
