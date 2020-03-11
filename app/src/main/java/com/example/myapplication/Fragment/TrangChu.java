@@ -103,15 +103,7 @@ public class TrangChu extends Fragment {
 
         adapterAnime = new AdapterAnime(contects1);
         adapterVideo = new AdapterVideo(contects);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
-        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
 
-        binding.rvPhimBo.setAdapter(adapterVideo);
-        binding.rvPhimBo.setLayoutManager(layoutManager);
-
-
-        binding.rvAnime.setAdapter(adapterAnime);
-        binding.rvAnime.setLayoutManager(layoutManager1);
         adapterVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
@@ -211,6 +203,13 @@ public class TrangChu extends Fragment {
                     String id = jsonObject.getString(Define.id);
                     contect = new VideoContect(title, date, avatar, linkVideo, id);
                     contects.add(contect);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+
+                    binding.rvPhimBo.setAdapter(adapterVideo);
+                    binding.rvPhimBo.setLayoutManager(layoutManager);
+
+
+
                 }
 
             } catch (JSONException e) {
@@ -268,6 +267,9 @@ public class TrangChu extends Fragment {
                     String id = jsonObject.getString(Define.id);
                     contect = new VideoContect(title, date, avatar, linkVideo, id);
                     contects1.add(contect);
+                    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+                    binding.rvAnime.setAdapter(adapterAnime);
+                    binding.rvAnime.setLayoutManager(layoutManager1);
                 }
 
             } catch (JSONException e) {

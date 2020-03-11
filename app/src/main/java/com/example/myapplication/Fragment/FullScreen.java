@@ -46,6 +46,7 @@ public class FullScreen extends AppCompatActivity {
     List<VideoContect> list;
     SQLHelperList sqlHelperList;
     PutVideoList putVideoList;
+    int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,27 +77,28 @@ public class FullScreen extends AppCompatActivity {
         contects = sqlHelperList.getAllProductAdvanced();
         adapterPlayVideo = new AdapterPlayVideo(contects);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getBaseContext(),1,RecyclerView.VERTICAL,false);
-       // binding.rvVideo.setAdapter(adapterPlayVideo);
+        binding.rvVideo.setAdapter(adapterPlayVideo);
         binding.rvVideo.setLayoutManager(layoutManager);
-
+        contects.add(videoContect);
         adapterPlayVideo.setIonClickVideo(new IonClickVideo() {
             @Override
             public void onClickItem(VideoContect contect) {
-                adapterPlayVideo = new AdapterPlayVideo(contects);
                 for (int i=0;i< contects.size();i++){
                     if(contect.getId() == contects.get(i).getId()){
+                        VideoContect contect1 = contect;
                         contects.remove(contect);
+                        contects.add(contect1);
                     }
                 }
-                contects.add(videoContect);
+
                 putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
-                editor.putString(Define.file_mp4, contect.getUrl());
-                editor.putString(Define.date_create, contect.getDate());
-                editor.putString(Define.title, contect.getName());
-                editor.putString(Define.id,contect.getId());
-                editor.putString(Define.avatar,contect.getImg());
-                editor.commit();
+//                editor.putString(Define.file_mp4, contect.getUrl());
+//                editor.putString(Define.date_create, contect.getDate());
+//                editor.putString(Define.title, contect.getName());
+//                editor.putString(Define.id,contect.getId());
+//                editor.putString(Define.avatar,contect.getImg());
+//                editor.commit();
 
                 Uri uri1 = Uri.parse(contect.getUrl());
                 binding.playVideo.setVideoURI(uri1);
@@ -107,7 +109,6 @@ public class FullScreen extends AppCompatActivity {
                 binding.rvVideo.setAdapter(adapterPlayVideo);
             }
         });
-        binding.rvVideo.setAdapter(adapterPlayVideo);
 
         binding.run.setVisibility(View.GONE);
         binding.imgFastForward.setVisibility(View.GONE);
@@ -129,6 +130,7 @@ public class FullScreen extends AppCompatActivity {
                 finish();
             }
         });
+//pause video
         binding.pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +177,45 @@ public class FullScreen extends AppCompatActivity {
         binding.nextVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    position = 0;
+                    VideoContect contect = contects.get(position);
+                    Uri uri2 = Uri.parse(contect.getUrl());
+                    binding.playVideo.setVideoURI(uri2);
+                    binding.playVideo.requestFocus();
+                    binding.playVideo.start();
+                    contects.remove(contects.get(position));
+                    contects.add(contect);
+                    putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
+
+            }
+        });
+//back video
+        binding.backVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(position == 0){
+                    position = contects.size()-2;
+                    VideoContect contect = contects.get(position);
+                    Uri uri2 = Uri.parse(contect.getUrl());
+                    binding.playVideo.setVideoURI(uri2);
+                    binding.playVideo.requestFocus();
+                    binding.playVideo.start();
+                    contects.remove(contects.get(position));
+                    contects.add(contect);
+                    putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
+
+                }else if(position > 0){
+                    VideoContect contect = contects.get(position - 1);
+                    Uri uri2 = Uri.parse(contect.getUrl());
+                    binding.playVideo.setVideoURI(uri2);
+                    binding.playVideo.requestFocus();
+                    binding.playVideo.start();
+                    contects.remove(contects.get(position-1));
+                    contects.add(contect);
+                    putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
+                    position--;
+                }else position=0;
             }
         });
 //full screen

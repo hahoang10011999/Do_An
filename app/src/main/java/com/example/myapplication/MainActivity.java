@@ -69,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (menuItem.getItemId()) {
                     case R.id.bottomHome:
                         getFragment(TrangChu.newInstance());
+                        checkInternet.setVisibility(View.VISIBLE);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkInternet.setVisibility(View.GONE);
+                            }
+                        },5000);
                         break;
                     case R.id.bottomPhimHai:
                         getFragment(PhimHai.newInstance());
