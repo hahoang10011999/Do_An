@@ -8,11 +8,24 @@
             android:id="@+id/video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/titleVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/mauXam">
+                <ImageButton
+                    android:id="@+id/backScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_arrow_back_black"
+                    android:background="@color/mauXam"
+                    android:layout_centerVertical="true"/>
+            </androidx.appcompat.widget.Toolbar>
             <VideoView
                 android:id="@+id/playVideo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_below="@+id/titleVideo"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,19 +64,7 @@
                     android:text="0%"
                     android:textColor="@color/colorWhite" />
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/titleVideo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/mauXam">
-                <ImageButton
-                    android:id="@+id/backScreen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_back_black"
-                    android:background="@color/mauXam"
-                    android:layout_centerVertical="true"/>
-            </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/videoBtn"
                 android:layout_width="match_parent"

@@ -2,10 +2,12 @@ package com.example.myapplication;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -16,10 +18,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +38,7 @@ import com.example.myapplication.Fragment.VideoDaXem;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -46,21 +51,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     Disposable disposable;
     LinearLayout checkInternet;
+    Toolbar toolbar;
     Handler handler = new Handler();
+    MaterialSearchView materialSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkInternet = findViewById(R.id.checkInternet);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        materialSearchView = findViewById(R.id.search);
 
-
+        toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer);
         NavigationView navigationView = findViewById(R.id.nav_View);
         navigationView.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_menu);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -75,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void run() {
                                 checkInternet.setVisibility(View.GONE);
                             }
-                        },5000);
+                        }, 5000);
                         break;
                     case R.id.bottomPhimHai:
                         getFragment(PhimHai.newInstance());
@@ -91,8 +98,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         toggle.syncState();
-
-
 
 
     }
@@ -133,26 +138,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean isConnected) throws Exception {
-                        if (isConnected==false) {
+                        if (isConnected == false) {
                             loadDialog();
-                        }
-                        else {
+                        } else {
                             getFragment(TrangChu.newInstance());
-
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     checkInternet.setVisibility(View.GONE);
                                 }
-                            },5000);
+                            }, 5000);
 
                         }
 
                     }
                 });
     }
-    public void loadDialog(){
-        AlertDialog.Builder dialog= new AlertDialog.Builder(this);
+
+    public void loadDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Lost Internet");
         dialog.setMessage("Checking again");
         dialog.setPositiveButton("Go to Setting", new DialogInterface.OnClickListener() {
@@ -168,5 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        materialSearchView.setMenuItem(menuItem);
+        return true;
     }
 }

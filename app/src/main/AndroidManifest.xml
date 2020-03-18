@@ -21,7 +21,7 @@
         <activity android:name=".Fragment.VideoDaXem" />
         <activity android:name=".Fragment.Login" />
         <activity android:name=".Fragment.TrangChu" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -298,8 +298,7 @@ public class FullScreen extends AppCompatActivity {
                                 binding.tvChange.setText(milisecond(time));
                             }
 
-                        }
-                        if (Math.abs(event.getY() - y) > 50) {
+                        }else if (Math.abs(event.getY() - y) > 50) {
                             binding.tvChange.setVisibility(View.VISIBLE);
                             if (event.getY() - y < 0 && currentVolume < 100) {
                                 currentVolume++;
@@ -313,6 +312,7 @@ public class FullScreen extends AppCompatActivity {
                                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume / stepVolume, 0);
                             }
                         }
+
                         break;
                     case MotionEvent.ACTION_UP:
                         binding.tvChange.setVisibility(View.INVISIBLE);
