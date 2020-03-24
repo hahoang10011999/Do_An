@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/home"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/title"/>
-        <item
-            android:id="@+id/mPhimHai"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/phim_hai"/>
-        <item
-            android:id="@+id/mPhimLe"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/phim_le"/>
-    </group>
-
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:title="@string/title"
+        android:icon="@drawable/ic_home_black_24dp"/>
+    <item
+        android:id="@+id/mPhimLe"
+        android:title="@string/phim_le"
+        android:icon="@drawable/ic_subscriptions_black_24dp"/>
+    <item
+        android:id="@+id/mPhimHai"
+        android:title="@string/phim_hai"
+        android:icon="@drawable/ic_videocam_black_24dp"/>
 
 </menu>

@@ -13,4 +13,11 @@
     <string name="close">close</string>
     <string name="loading">Loading....</string>
     <string name="tim_kiem">Search</string>
+    <string-array name="query_suggestions">
+        <item>Furniture</item>
+        <item>Women Fashion</item>
+        <item>Hotels</item>
+        <item>Man Fashion</item>
+        <item>Electronics Appliances</item>
+    </string-array>
 </resources>
