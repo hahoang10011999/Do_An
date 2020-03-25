@@ -33,10 +33,7 @@
                 android:textColor="@color/black"
                 android:textSize="20dp" />
         </LinearLayout>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/fToolbar">
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolBar"
                 android:layout_width="match_parent"
@@ -71,13 +68,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/searchView"/>
-        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/fToolbar"
+            android:layout_marginTop="59dp"
             android:layout_above="@+id/bottom_menu"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

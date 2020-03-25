@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MaterialSearchView searchView;
     Handler handler = new Handler();
     RelativeLayout layoutLogo;
+    FrameLayout frameLayout;
 
 
 
@@ -55,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkInternet = findViewById(R.id.checkInternet);
         toolbar = findViewById(R.id.toolBar);
         layoutLogo = findViewById(R.id.Logo);
+        frameLayout = findViewById(R.id.container);
         setSupportActionBar(toolbar);
-        getFragment(TrangChu.newInstance());
+
         searchViewCode();
 
         drawerLayout = findViewById(R.id.drawer);
@@ -177,12 +180,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onSearchViewShown() {
                 layoutLogo.setVisibility(View.GONE);
                 toolbar.setVisibility(View.GONE);
+                frameLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onSearchViewClosed() {
                 layoutLogo.setVisibility(View.VISIBLE);
                 toolbar.setVisibility(View.VISIBLE);
+                frameLayout.setVisibility(View.VISIBLE);
             }
         });
     }
