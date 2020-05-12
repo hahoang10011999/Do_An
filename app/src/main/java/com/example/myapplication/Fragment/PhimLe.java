@@ -79,6 +79,11 @@ public class PhimLe extends Fragment {
                 if (list != null) {
                     sqlHelperList.delAllProduct();
                 }
+                if (list != null) {
+                    sqlHelperList.delAllProduct();
+                }
+
+
                 putVideoList.onPutVideo(contects, contect, sqlHelperList);
                 putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
