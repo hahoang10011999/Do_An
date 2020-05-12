@@ -53,7 +53,7 @@ public class FullScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_full_screen);
-
+        setSupportActionBar(binding.titleVideo);
 
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

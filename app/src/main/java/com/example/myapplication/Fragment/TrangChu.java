@@ -132,8 +132,6 @@ public class TrangChu extends Fragment {
                 if (list != null) {
                     sqlHelperList.delAllProduct();
                 }
-
-
                 putVideoList.onPutVideo(contects1, contect, sqlHelperList);
                 putVideoList.onPutVideoHistory(videoContects, contect, sqlHelper, dem);
 
@@ -153,7 +151,7 @@ public class TrangChu extends Fragment {
     }
 
 
-    class DogetData extends AsyncTask<Void, Void, Void> {
+    public class DogetData extends AsyncTask<Void, Void, Void> {
         String result = "";
         String urlApi;
 
@@ -204,12 +202,8 @@ public class TrangChu extends Fragment {
                     contect = new VideoContect(title, date, avatar, linkVideo, id);
                     contects.add(contect);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
-
                     binding.rvPhimBo.setAdapter(adapterVideo);
                     binding.rvPhimBo.setLayoutManager(layoutManager);
-
-
-
                 }
 
             } catch (JSONException e) {
@@ -217,7 +211,7 @@ public class TrangChu extends Fragment {
             }
         }
     }
-    class DogetData1 extends AsyncTask<Void, Void, Void> {
+    public class DogetData1 extends AsyncTask<Void, Void, Void> {
         String result = "";
         String urlPL;
 

@@ -10,10 +10,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -21,15 +25,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.myapplication.Contect.VideoContect;
+import com.example.myapplication.Fragment.FullScreen;
 import com.example.myapplication.Fragment.PhimHai;
 import com.example.myapplication.Fragment.PhimLe;
 import com.example.myapplication.Fragment.TrangChu;
 import com.example.myapplication.Fragment.VideoDaXem;
+import com.example.myapplication.SQL.SQLHelper;
+import com.example.myapplication.SQL.SQLHelperList;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -45,8 +68,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MaterialSearchView searchView;
     Handler handler = new Handler();
     RelativeLayout layoutLogo;
+<<<<<<< HEAD
 
 
+=======
+    FrameLayout frameLayout;
+    String urlApi = Define.hotVideo;
+    String urlPL = Define.phimLe;
+    List<String> suggestions;
+    List<VideoContect> contects;
+    List<VideoContect> list;
+    List<VideoContect> videoContects;
+    String[] strings;
+    SQLHelper sqlHelper;
+    SQLHelperList sqlHelperList;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    PutVideoList putVideoList;
+    int dem = 0;
+>>>>>>> parent of 6381a6b... Revert "h"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +95,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkInternet = findViewById(R.id.checkInternet);
         toolbar = findViewById(R.id.toolBar);
         layoutLogo = findViewById(R.id.Logo);
+<<<<<<< HEAD
         setSupportActionBar(toolbar);
         getFragment(TrangChu.newInstance());
         searchViewCode();
+=======
+        frameLayout = findViewById(R.id.container);
+        sqlHelper = new SQLHelper(getBaseContext());
+        sqlHelperList = new SQLHelperList(getBaseContext());
+        list = sqlHelperList.getAllProductAdvanced();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        editor = sharedPreferences.edit();
+        putVideoList = new PutVideoList(getBaseContext());
+
+        searchView = (MaterialSearchView) findViewById(R.id.searchView);
+        setSupportActionBar(toolbar);
+
+        suggestions = new ArrayList<>();
+        contects = new ArrayList<>();
+        new DogetData(urlApi).execute();
+        new DogetData1(urlPL).execute();
+
+
+>>>>>>> parent of 6381a6b... Revert "h"
 
         drawerLayout = findViewById(R.id.drawer);
         NavigationView navigationView = findViewById(R.id.nav_View);
@@ -96,7 +156,122 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
 
+    }
 
+    public class DogetData extends AsyncTask<Void, Void, Void> {
+        String result = "";
+        String urlAPI;
+
+        public DogetData(String urlAPI) {
+            this.urlAPI = urlAPI;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                URL url = new URL(urlAPI);
+                URLConnection connection = url.openConnection();
+                InputStream inputStream = connection.getInputStream();
+                int byteCharacter;
+                while ((byteCharacter = inputStream.read()) != -1) {
+                    result += (char) byteCharacter;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                int length = jsonArray.length();
+                VideoContect contect;
+                for (int i = 0; i < length; i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String title = jsonObject.getString(Define.title);
+                    String avatar = jsonObject.getString(Define.avatar);
+                    String date = jsonObject.getString(Define.date_create);
+                    String linkVideo = jsonObject.getString(Define.file_mp4);
+                    String id = jsonObject.getString(Define.id);
+                    contect = new VideoContect(title, date, avatar, linkVideo, id);
+                    contects.add(contect);
+                    suggestions.add(title);
+                }
+                strings = suggestions.toArray(new String[suggestions.size()]);
+                searchViewCode();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class DogetData1 extends AsyncTask<Void, Void, Void> {
+        String result = "";
+        String urlPL;
+
+        public DogetData1(String url) {
+            this.urlPL = url;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                URL url = new URL(urlPL);
+                URLConnection connection = url.openConnection();
+                InputStream is = connection.getInputStream();
+                int byteCharacter;
+                while ((byteCharacter = is.read()) != -1) {
+                    result += (char) byteCharacter;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                int length = jsonArray.length();
+                VideoContect contect;
+                for (int i = 0; i < length; i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String title = jsonObject.getString(Define.title);
+                    String avatar = jsonObject.getString(Define.avatar);
+                    String date = jsonObject.getString(Define.date_create);
+                    String linkVideo = jsonObject.getString(Define.file_mp4);
+                    String id = jsonObject.getString(Define.id);
+                    contect = new VideoContect(title, date, avatar, linkVideo, id);
+                    contects.add(contect);
+                    suggestions.add(title);
+                }
+                strings = suggestions.toArray(new String[suggestions.size()]);
+                searchViewCode();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void getFragment(Fragment fragment) {
@@ -109,8 +284,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG, "getFragment: " + e.getMessage());
         }
     }
-
-
 
 
     public void onResume() {
@@ -156,14 +329,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         dialog.show();
     }
+
     private void searchViewCode() {
-        searchView = (MaterialSearchView) findViewById(R.id.searchView);
-        searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
+
+        searchView.setSuggestions(strings);
         searchView.setEllipsize(true);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+                for(int i = 0 ; i <contects.size();i++){
+                    if(query.equals(contects.get(i).getName()) == true){
+                        if (list != null) {
+                            sqlHelperList.delAllProduct();
+                        }
+                        putVideoList.onPutVideo(contects, contects.get(i), sqlHelperList);
+                        putVideoList.onPutVideoHistory(videoContects, contects.get(i), sqlHelper, dem);
+
+                        editor.putString(Define.file_mp4, contects.get(i).getUrl());
+                        editor.putString(Define.date_create, contects.get(i).getDate());
+                        editor.putString(Define.title, contects.get(i).getName());
+                        editor.putString(Define.id,contects.get(i).getId());
+                        editor.putString(Define.avatar,contects.get(i).getImg());
+                        editor.commit();
+
+                        Intent intent = new Intent(getBaseContext(), FullScreen.class);
+                        startActivity(intent);
+                    }
+                }
                 return false;
             }
 
@@ -204,11 +396,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     public void onBackPressed() {
         if (searchView.isSearchOpen()) {
             searchView.closeSearch();
-        } else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -216,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.home:
                 getFragment(TrangChu.newInstance());
                 break;
@@ -232,4 +425,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
